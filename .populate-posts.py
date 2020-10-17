@@ -67,8 +67,8 @@ def create_post(post):
 
 
 @click.command()
+@click.option('--userId', '-u', help='Use provided userId', required=True)
 @click.option('--limit', '-l', help='Limit number of posts to this', default=10, required=False)
-@click.option('--userId', '-u', help='Use provided userId', default='5f71fb75fa3b7436935d643a', required=False)
 def main(limit, userid):
     global user_id
     user_id = userid
