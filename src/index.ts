@@ -10,6 +10,10 @@ import initDatabase from './database'
 
 const app = express()
 
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(__dirname + '../public'))
+}
+
 app.use(cors())
 app.use(enhanceExpress)
 app.use(morgan('dev'))
