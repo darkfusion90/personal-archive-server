@@ -1,3 +1,7 @@
-import dotenv from 'dotenv'
+export default () => {
+    if (process.env.NODE_ENV === 'production') {
+        return console.log('Production mode. Will not initialize using dotenv')
+    }
 
-export default dotenv.config
+    require('dotenv').config()
+}
