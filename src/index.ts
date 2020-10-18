@@ -7,11 +7,12 @@ import cors from 'cors'
 import { initPassport, initSession, enhanceExpress, throttle } from './middlewares'
 import initRouter from './router'
 import initDatabase from './database'
+import config from './config'
 
 const app = express()
 
 if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(__dirname + '../public'))
+    app.use(express.static(config.staticRoot))
 }
 
 app.use(cors())
@@ -26,5 +27,7 @@ initRouter(app)
 
 const port = +process.env.PORT! || 8000
 initDatabase().then(_ => {
+    const { NODE_ENV, MONGO_URL, SESSION_SECRET } = process.env
+    console.log('process.env: ', { NODE_ENV, MONGO_URL, SESSION_SECRET })
     app.listen(port, () => console.log(`Listening on port: ${port}`))
 }).catch(err => console.log('Error connecting to database: ', err))
