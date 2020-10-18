@@ -3,5 +3,9 @@ export default () => {
         return console.log('Production mode. Will not initialize using dotenv')
     }
 
-    require('dotenv').config()
+    try {
+        require('dotenv').config()
+    } catch (err) {
+        console.log('Error retrieving dotenv: ', err)
+    }
 }
