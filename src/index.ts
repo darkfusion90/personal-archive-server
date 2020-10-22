@@ -6,7 +6,13 @@ import morgan from 'morgan'
 import cors from 'cors'
 import sslRedirect from 'heroku-ssl-redirect'
 
-import { initPassport, initSession, enhanceExpress, throttle } from './middlewares'
+import {
+    initPassport,
+    initSession,
+    enhanceExpress,
+    throttle,
+    createUserAuthDetailMiddleware
+} from './middlewares'
 import initRouter from './router'
 import initDatabase from './database'
 import config from './config'
@@ -26,7 +32,11 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 initSession(app)
 initPassport(app)
+// NOTE: Make sure this middleware is initiated after session and passport
+app.use(createUserAuthDetailMiddleware)
+
 initRouter(app)
+
 
 const port = +process.env.PORT! || 8000
 initDatabase().then(_ => {
