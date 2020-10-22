@@ -21,5 +21,6 @@ function postsRouter(app) {
     app.post(['/api/users/:userId/posts', '/api/posts'], postValidator, posts.post);
     app.get('/api/posts/:postId?', getValidator, posts.get);
     app.delete('/api/posts/:postId', delete_validator_1.default, posts._delete);
+    app.put('/api/posts/:postId', postValidator, posts.put);
 }
 exports.default = postsRouter;

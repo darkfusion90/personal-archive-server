@@ -6,5 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const get_1 = __importDefault(require("./get"));
 const post_1 = __importDefault(require("./post"));
 const delete_1 = __importDefault(require("./delete"));
+const put_1 = __importDefault(require("./put"));
 const middlewares_1 = __importDefault(require("./middlewares"));
-exports.default = { get: get_1.default, post: post_1.default, _delete: delete_1.default, middlewares: middlewares_1.default };
+exports.default = { get: get_1.default, post: post_1.default, _delete: delete_1.default, put: put_1.default, middlewares: middlewares_1.default };

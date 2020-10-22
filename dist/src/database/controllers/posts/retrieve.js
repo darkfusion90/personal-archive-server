@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getPostById = exports.getAllPostsOfUser = void 0;
 const PostModel_1 = __importDefault(require("../../models/PostModel"));
+const utils_1 = require("../../../utils");
 function getSortOpts({ sort, order }) {
     const getSortOrder = () => {
         switch (order) {
@@ -27,7 +28,7 @@ function getSortOpts({ sort, order }) {
 }
 function getTagsRegex(tags) {
     // 'i' makes regex case insensitive
-    return tags.map(tag => new RegExp(tag, 'i'));
+    return tags.map(tag => new RegExp(utils_1.escapeRegex(tag), 'i'));
 }
 exports.getAllPostsOfUser = (userId, { tags, query: searchQuery, sort, order } = {}) => {
     const query = {
@@ -39,7 +40,7 @@ exports.getAllPostsOfUser = (userId, { tags, query: searchQuery, sort, order } =
         };
     }
     if (searchQuery) {
-        const searchRegex = new RegExp(searchQuery, 'i');
+        const searchRegex = new RegExp(utils_1.escapeRegex(searchQuery), 'i');
         query.$or = [
             { title: { $regex: searchRegex } },
             { comment: { $regex: searchRegex } }
