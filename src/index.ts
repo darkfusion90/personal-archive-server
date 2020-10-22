@@ -5,13 +5,15 @@ import express from 'express'
 import morgan from 'morgan'
 import cors from 'cors'
 import sslRedirect from 'heroku-ssl-redirect'
+import { express as expressUserAgent } from 'express-useragent'
 
 import {
     initPassport,
     initSession,
     enhanceExpress,
     throttle,
-    createUserAuthDetailMiddleware
+    createUserAuthDetailMiddleware,
+    useragentLogger
 } from './middlewares'
 import initRouter from './router'
 import initDatabase from './database'
@@ -23,6 +25,8 @@ if (process.env.NODE_ENV === 'production') {
     app.use(express.static(config.staticRoot))
 }
 
+app.use(expressUserAgent())
+app.use(useragentLogger)
 app.use(sslRedirect())
 app.use(cors())
 app.use(enhanceExpress)
@@ -36,7 +40,6 @@ initPassport(app)
 app.use(createUserAuthDetailMiddleware)
 
 initRouter(app)
-
 
 const port = +process.env.PORT! || 8000
 initDatabase().then(_ => {
