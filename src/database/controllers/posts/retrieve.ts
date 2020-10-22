@@ -1,5 +1,6 @@
 import PostModel, { IPostDocument } from "../../models/PostModel";
 import { FilterQuery } from "mongoose";
+import { escapeRegex } from "../../../utils";
 
 export type IPostSortType = 'title' | 'date'
 export type IPostSortOrder = 'asc' | 'desc'
@@ -40,7 +41,7 @@ function getSortOpts({ sort, order }: IPostSortOpts) {
 
 function getTagsRegex(tags: string[]) {
     // 'i' makes regex case insensitive
-    return tags.map(tag => new RegExp(tag, 'i'))
+    return tags.map(tag => new RegExp(escapeRegex(tag), 'i'))
 }
 
 export const getAllPostsOfUser = (
@@ -63,7 +64,7 @@ export const getAllPostsOfUser = (
     }
 
     if (searchQuery) {
-        const searchRegex = new RegExp(searchQuery, 'i')
+        const searchRegex = new RegExp(escapeRegex(searchQuery), 'i')
         query.$or = [
             { title: { $regex: searchRegex } },
             { comment: { $regex: searchRegex } }
