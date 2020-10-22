@@ -12,4 +12,6 @@ export default function (app: Application) {
     const { multiFactorAuth } = auth
     app.post('/api/auth/multifactor/generate', multiFactorAuth.generate)
     app.post('/api/auth/multifactor/verify/:authToken', multiFactorAuth.verify)
+    app.put('/api/auth/multifactor/enable', multiFactorAuth.enable)
+    app.put('/api/auth/multifactor/disable', multiFactorAuth.disable)
 }
