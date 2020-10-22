@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 import crypto from 'crypto'
 import addMinutes from 'date-fns/addMinutes'
+import { DeviceSchema, IDevice } from '../models/TrustedDeviceModel'
 
 const DataTypes = mongoose.Schema.Types
 
@@ -8,6 +9,7 @@ export interface IAuthTokenDocument extends mongoose.Document {
     user: string
     token: string
     expiresAt: Date
+    deviceToVerify: IDevice
     hasExpired: () => boolean
 }
 
@@ -23,6 +25,10 @@ const AuthTokenSchema = new mongoose.Schema<IAuthTokenDocument>({
         type: DataTypes.String,
         index: true,
         unique: true,
+    },
+    deviceToVerify: {
+        type: DeviceSchema,
+        required: true
     },
     expiresAt: {
         type: DataTypes.Date,
