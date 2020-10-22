@@ -5,6 +5,7 @@ import {
     verifyAuthToken,
     AuthTokenVerificationFailedError
 } from '../../../database/controllers/auth-tokens'
+import { addUserTrustedDevice } from '../../../database/controllers/trusted-devices'
 
 interface IVerifyTokenRequestParams {
     authToken: string
@@ -20,7 +21,13 @@ const verifyTokenHandler: IVerifyTokenRequestHandler = async (req, res, next) =>
 
     try {
         const authToken = await verifyAuthToken(req.params.authToken, userId)
-        res.json({ authToken })
+        const userTrustedDevices = await addUserTrustedDevice(userId, authToken.deviceToVerify)
+        if (!userTrustedDevices) {
+            // TODO: Handle this elegantly
+            throw new Error('no user trusted device')
+        } else {
+            res.json({ message: 'device verified', authToken })
+        }
     } catch (err) {
         // TODO: Migrate all error handlers to one place (express error handler)
         if (err instanceof AuthTokenVerificationFailedError) {
