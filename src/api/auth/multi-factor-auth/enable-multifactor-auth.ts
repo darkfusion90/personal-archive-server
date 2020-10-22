@@ -5,6 +5,7 @@ import { addUserTrustedDevice } from '../../../database/controllers/trusted-devi
 
 import { sessionUserId } from '../../../utils/session-user'
 import { getUserDeviceInfo } from './utils'
+import { performMultifactorLogin } from '../utils'
 
 const enableMultifactorAuth: RequestHandler = async (req, res, next) => {
     const userId = sessionUserId(req)
@@ -16,7 +17,8 @@ const enableMultifactorAuth: RequestHandler = async (req, res, next) => {
     try {
         await Promise.all([
             markMultifactorAuthForUser(userId, true),
-            addUserTrustedDevice(userId, currentUserDevice)
+            addUserTrustedDevice(userId, currentUserDevice),
+            performMultifactorLogin(req)
         ])
 
         res.json({ message: 'multifactor-auth-enabled' })
