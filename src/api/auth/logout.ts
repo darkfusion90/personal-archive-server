@@ -1,19 +1,13 @@
 import { RequestHandler } from "express";
+import { performMultifactorLogout } from "./utils";
 
-const logout: RequestHandler = (req, res) => {
-    const success = () => res.json({ message: 'Logged out successfully' })
-
-    if (req.session) {
-        req.session.destroy(err => {
-            if (err) {
-                res.status(500).json({})
-            } else {
-                success()
-            }
-        })
-    } else {
-        // TODO: Maybe specify that session could not be found?
-        success()
+const logout: RequestHandler = async (req, res) => {
+    try {
+        await performMultifactorLogout(req)
+        req.logout()
+        res.json({ message: 'Logged out successfully' })
+    } catch (err) {
+        res.status(500).json({})
     }
 }
 
