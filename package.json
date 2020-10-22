@@ -19,6 +19,7 @@
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "express-validator": "^6.6.1",
+    "heroku-ssl-redirect": "^0.1.1",
     "mongoose": "^5.10.7",
     "morgan": "^1.10.0",
     "passport": "^0.4.1",

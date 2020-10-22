@@ -4,6 +4,8 @@ initDotenv()
 import express from 'express'
 import morgan from 'morgan'
 import cors from 'cors'
+import sslRedirect from 'heroku-ssl-redirect'
+
 import { initPassport, initSession, enhanceExpress, throttle } from './middlewares'
 import initRouter from './router'
 import initDatabase from './database'
@@ -15,6 +17,7 @@ if (process.env.NODE_ENV === 'production') {
     app.use(express.static(config.staticRoot))
 }
 
+app.use(sslRedirect())
 app.use(cors())
 app.use(enhanceExpress)
 app.use(morgan('dev'))
