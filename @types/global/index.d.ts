@@ -11,9 +11,7 @@ type RespondResource<T> = T | T[] | null
 
 namespace Express {
     interface Session extends SessionData {
-        passport?: {
-            user: string
-        }
+        multifactorAuthenticated?: boolean
     }
     interface Response {
         respondResource: (data: any, fieldName: any) => void
