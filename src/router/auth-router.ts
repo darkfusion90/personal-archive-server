@@ -8,4 +8,8 @@ export default function (app: Application) {
     app.post('/api/auth/logout', auth.logout)
     app.post('/api/auth/register', validators.register, auth.register)
     app.get('/api/auth/status', auth.status)
+
+    const { multiFactorAuth } = auth
+    app.post('/api/auth/multifactor/generate', multiFactorAuth.generate)
+    app.post('/api/auth/multifactor/verify/:authToken', multiFactorAuth.verify)
 }
