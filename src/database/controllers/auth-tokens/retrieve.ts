@@ -1,4 +1,4 @@
-import AuthTokenModel, { IAuthTokenDocument } from '../../models/AuthTokenModel'
+import AuthTokenModel from '../../models/AuthTokenModel'
 
 type IAuthTokenVerificationFailedReason = 'token-not-found' | 'token-expired'
 
