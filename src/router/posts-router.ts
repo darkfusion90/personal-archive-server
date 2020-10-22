@@ -23,4 +23,9 @@ export default function postsRouter(app: Application) {
         deleteValidator,
         posts._delete
     )
+    app.put(
+        '/api/posts/:postId',
+        postValidator,
+        posts.put
+    )
 }
