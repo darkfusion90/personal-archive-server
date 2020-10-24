@@ -66,6 +66,7 @@ export const performMultifactorLogout = async (req: AnyRequest) => {
 export interface IUserAuthStatus {
     user: IUserDocument | null
     loggedIn?: boolean
+    singleFactorLoggedIn?: boolean
     emailVerified?: IAuthDetailDocument['emailVerified']
     multifactorAuthEnabled?: IAuthDetailDocument['multiFactorAuthEnabled']
 }
@@ -91,7 +92,8 @@ export const getUserAuthStatus = async (req: AnyRequest): Promise<IUserAuthStatu
         // Auth details not available; no need to check multifactor
         return {
             user,
-            loggedIn: basicLoggedIn
+            loggedIn: true,
+            singleFactorLoggedIn: true
         }
     }
 
@@ -100,7 +102,8 @@ export const getUserAuthStatus = async (req: AnyRequest): Promise<IUserAuthStatu
         console.log('Multifactor auth not enabled. Will not perform multifactor checks')
         return {
             user,
-            loggedIn: basicLoggedIn,
+            loggedIn: true,
+            singleFactorLoggedIn: true,
             multifactorAuthEnabled,
             emailVerified: authDetails.emailVerified
         }
@@ -110,6 +113,7 @@ export const getUserAuthStatus = async (req: AnyRequest): Promise<IUserAuthStatu
     return {
         user,
         loggedIn,
+        singleFactorLoggedIn: true,
         multifactorAuthEnabled,
         emailVerified: authDetails.emailVerified
     }
