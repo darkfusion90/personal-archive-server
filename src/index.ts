@@ -13,7 +13,8 @@ import {
     enhanceExpress,
     throttle,
     createUserAuthDetailMiddleware,
-    useragentLogger
+    useragentLogger,
+    errorHandler
 } from './middlewares'
 import initRouter from './router'
 import initDatabase from './database'
@@ -40,6 +41,7 @@ initPassport(app)
 app.use(createUserAuthDetailMiddleware)
 
 initRouter(app)
+app.use(errorHandler)
 
 const port = +process.env.PORT! || 8000
 initDatabase().then(_ => {
