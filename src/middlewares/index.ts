@@ -5,6 +5,7 @@ import createUserAuthDetailMiddleware from './create-user-auth-detail'
 import enhanceExpress from './enhance-express'
 import throttle from './throttle'
 import useragentLogger from './useragent-logger'
+import errorHandler from './error-handler'
 
 export {
     initPassport,
@@ -13,5 +14,6 @@ export {
     createUserAuthDetailMiddleware,
     enhanceExpress,
     throttle,
-    useragentLogger
+    useragentLogger,
+    errorHandler
 }
