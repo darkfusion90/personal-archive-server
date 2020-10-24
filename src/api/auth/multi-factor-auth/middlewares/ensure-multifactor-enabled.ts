@@ -3,7 +3,7 @@ import { RequestHandler } from 'express'
 import { hasUserEnabledMultifactorAuth } from '../../../../database/controllers/auth-details'
 import { sessionUserId } from '../../../../utils/session-user'
 
-const ensureMultifactorAuthEnabled: RequestHandler = async (req, res, next) => {
+export const ensureMultifactorAuthEnabled: RequestHandler = async (req, res, next) => {
     const userId = sessionUserId(req)
     if (!userId) {
         return res.status(401).json({ message: 'missing session' })
