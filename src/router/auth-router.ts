@@ -10,23 +10,8 @@ export default function (app: Application) {
     app.get('/api/auth/status', auth.status)
 
     const { multiFactorAuth } = auth
-    const { middlewares: { ensureEmailVerified, ensureMultifactorAuthEnabled } } = multiFactorAuth
-    app.post(
-        '/api/auth/multifactor/generate',
-        //ensureEmailVerified,
-        ensureMultifactorAuthEnabled,
-        multiFactorAuth.generate
-    )
-    app.post(
-        '/api/auth/multifactor/verify/:authToken',
-        //ensureEmailVerified,
-        ensureMultifactorAuthEnabled,
-        multiFactorAuth.verify as any
-    )
-    app.put(
-        '/api/auth/multifactor/enable',
-        //ensureEmailVerified,
-        multiFactorAuth.enable
-    )
+    app.post('/api/auth/multifactor/generate', multiFactorAuth.generate)
+    app.post<any>('/api/auth/multifactor/verify/:authToken', multiFactorAuth.verify)
+    app.put('/api/auth/multifactor/enable', multiFactorAuth.enable)
     app.put('/api/auth/multifactor/disable', multiFactorAuth.disable)
 }
