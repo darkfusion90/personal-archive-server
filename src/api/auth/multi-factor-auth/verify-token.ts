@@ -6,6 +6,8 @@ import {
     AuthTokenVerificationFailedError
 } from '../../../database/controllers/auth-tokens'
 import { addUserTrustedDevice } from '../../../database/controllers/trusted-devices'
+import ensureMultifactorAuthEnabled from './middlewares/ensure-multifactor-enabled'
+import { ensureLoggedIn } from '../middlewares'
 
 interface IVerifyTokenRequestParams {
     authToken: string
@@ -38,4 +40,9 @@ const verifyTokenHandler: IVerifyTokenRequestHandler = async (req, res, next) =>
     }
 }
 
-export default verifyTokenHandler
+export default [
+    // TODO: Add ensureEmailVerified
+    ensureLoggedIn({ checkMultifactor: false }),
+    ensureMultifactorAuthEnabled,
+    verifyTokenHandler
+]
