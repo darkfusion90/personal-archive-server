@@ -18,4 +18,8 @@ export default function (app: Application) {
     const { emailVerification } = auth
     app.post('/api/auth/email-verification/generate', emailVerification.generate)
     app.post('/api/auth/email-verification/verify/:token', emailVerification.verify)
+
+    const { passwordReset } = auth
+    app.post('/api/auth/password-reset/generate', passwordReset.generate as any)
+    app.post('/api/auth/password-reset/verify/:token', passwordReset.verify as any)
 }
