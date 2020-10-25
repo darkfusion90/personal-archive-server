@@ -15,7 +15,7 @@ namespace Express {
     }
     interface Response {
         respondResource: (data: any, fieldName: any) => void
-        message: (msg?: string) => void
+        message: (msg?: string, status?: number) => void
     }
 }
 
