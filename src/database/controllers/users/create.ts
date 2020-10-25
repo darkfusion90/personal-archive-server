@@ -6,7 +6,7 @@ interface CreateUserOpts {
     password: string
 }
 
-function createUser({ email, username, password }: CreateUserOpts) {
+export function createUser({ email, username, password }: CreateUserOpts) {
     const user = new UserModel({ email, username, password })
     return user.save()
 }
