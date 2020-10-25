@@ -18,6 +18,10 @@ const enhanceExpress: RequestHandler = (_, res, next) => {
         }
     }
 
+    res.message = function (message) {
+        res.json({ message })
+    }
+
     next()
 }
 
