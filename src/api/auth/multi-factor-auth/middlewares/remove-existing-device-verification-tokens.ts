@@ -1,9 +1,9 @@
 import { RequestHandler } from 'express'
 
-import { removeAllTokensForUser } from '../../../../database/controllers/auth-tokens'
+import { removeAllTokensForUser } from '../../../../database/controllers/device-verification-tokens'
 import { sessionUserId } from '../../../../utils/session-user'
 
-export const removeExistingAuthTokens: RequestHandler = async (req, res, next) => {
+export const removeExistingDeviceVerificationTokens: RequestHandler = async (req, res, next) => {
     const userId = sessionUserId(req) as string
 
     try {
@@ -14,4 +14,4 @@ export const removeExistingAuthTokens: RequestHandler = async (req, res, next) =
     }
 }
 
-export default removeExistingAuthTokens
+export default removeExistingDeviceVerificationTokens
