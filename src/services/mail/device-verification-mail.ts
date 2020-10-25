@@ -1,5 +1,5 @@
 import ejs from 'ejs'
-import transport from './transport'
+import { sendMail } from './transport'
 import { renderDeviceVerification, IDeviceVerificationMailOpts } from './views'
 
 import mailConfig from './config'
@@ -11,8 +11,7 @@ export const sendDeviceVerificationMail = async (
 ) => {
     const html = await renderDeviceVerification({ username: user.username, ...opts })
 
-    return transport.sendMail({
-        from: mailConfig.username,
+    return sendMail({
         to: user.email,
         subject: 'Verify unknown device - PersonalArchive',
         html
