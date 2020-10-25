@@ -14,4 +14,8 @@ export default function (app: Application) {
     app.post<any>('/api/auth/multifactor/verify/:authToken', multiFactorAuth.verify)
     app.put('/api/auth/multifactor/enable', multiFactorAuth.enable)
     app.put('/api/auth/multifactor/disable', multiFactorAuth.disable)
+
+    const { emailVerification } = auth
+    app.post('/api/auth/email-verification/generate', emailVerification.generate)
+    app.post('/api/auth/email-verification/verify/:token', emailVerification.verify)
 }
