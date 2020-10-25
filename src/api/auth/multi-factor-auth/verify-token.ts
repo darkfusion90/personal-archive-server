@@ -4,7 +4,7 @@ import { sessionUserId } from '../../../utils/session-user'
 import {
     verifyAuthToken,
     AuthTokenVerificationFailedError
-} from '../../../database/controllers/auth-tokens'
+} from '../../../database/controllers/device-verification-tokens'
 import { addUserTrustedDevice } from '../../../database/controllers/trusted-devices'
 import ensureMultifactorAuthEnabled from './middlewares/ensure-multifactor-enabled'
 import { ensureLoggedIn } from '../middlewares'
@@ -16,10 +16,7 @@ interface IVerifyTokenRequestParams {
 type IVerifyTokenRequestHandler = RequestHandler<IVerifyTokenRequestParams>
 
 const verifyTokenHandler: IVerifyTokenRequestHandler = async (req, res, next) => {
-    const userId = sessionUserId(req)
-    if (!userId) {
-        return res.status(500).json({ message: 'session missing' })
-    }
+    const userId = sessionUserId(req) as string
 
     try {
         const authToken = await verifyAuthToken(req.params.authToken, userId)
@@ -28,7 +25,8 @@ const verifyTokenHandler: IVerifyTokenRequestHandler = async (req, res, next) =>
             // TODO: Handle this elegantly
             throw new Error('no user trusted device')
         } else {
-            res.json({ message: 'device verified', authToken })
+            await authToken.deleteOne()
+            res.json({ message: 'device verified' })
         }
     } catch (err) {
         // TODO: Migrate all error handlers to one place (express error handler)
