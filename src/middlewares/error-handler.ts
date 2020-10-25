@@ -9,7 +9,12 @@ const errorHandler: ErrorRequestHandler = (err, _, res, __) => {
         return res.status(401).json({ reason: err.reason, message: 'invalid-token' })
     }
 
-    res.status(500).json({ message: 'unknown-error' })
+    const isProduction = process.env.NODE_ENV === 'production'
+
+    res.status(500).json({
+        message: 'unknown-error',
+        err: isProduction ? undefined : err
+    })
 }
 
 export default errorHandler
