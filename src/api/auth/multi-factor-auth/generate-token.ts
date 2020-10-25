@@ -1,12 +1,13 @@
 import { RequestHandler } from 'express'
 
 import { sessionUser, getAbsoluteUrl, simpleParseUseragent } from '../../../utils'
-import { createAuthToken } from '../../../database/controllers/auth-tokens'
+import { createAuthToken } from '../../../database/controllers/device-verification-tokens'
 import { getUserDeviceInfo } from './utils'
 import { sendDeviceVerificationMail } from '../../../services/mail'
 import {
     ensureMultifactorAuthEnabled,
-    removeExistingAuthTokens
+    checkIfDeviceAlreadyVerified,
+    removeExistingDeviceVerificationTokens
 } from './middlewares'
 import { ensureLoggedIn } from '../middlewares'
 import { IUserDocument } from '../../../database/models/UserModel'
@@ -17,20 +18,21 @@ const generateToken: RequestHandler = async (req, res) => {
     const userDeviceInfo = getUserDeviceInfo(req)
     const authToken = await createAuthToken(user.id, userDeviceInfo)
 
-    await sendDeviceVerificationMail(user, {
+    /* await sendDeviceVerificationMail(user, {
         // Have a DEVICE_VERIFY_CALLBACK in process.env
         verificationLink: getAbsoluteUrl(`/api/auth/multifactor/verify/${authToken.token}`),
         deviceInfo: simpleParseUseragent(userDeviceInfo.userAgent),
         ipAddress: userDeviceInfo.ipAddress
     })
-
-    res.json({ message: 'token generated' })
+ */
+    res.json({ message: 'token generated', authToken })
 }
 
 export default [
     // TODO: Add ensureEmailVerified
     ensureLoggedIn({ checkMultifactor: false }),
     ensureMultifactorAuthEnabled,
-    removeExistingAuthTokens,
+    checkIfDeviceAlreadyVerified,
+    removeExistingDeviceVerificationTokens,
     generateToken
 ]
