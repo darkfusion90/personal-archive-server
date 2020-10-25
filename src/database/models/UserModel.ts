@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose, { HookNextFunction } from 'mongoose'
 import bcrypt from 'bcrypt'
 
 const kPasswordSalt = 14
@@ -38,6 +38,16 @@ UserSchema.methods.filterSensitiveData = function () {
     return { username, email }
 }
 
+async function hashPassword<D extends { password: string }>(doc: D, next: HookNextFunction) {
+    try {
+        doc.password = await bcrypt.hash(doc.password, kPasswordSalt)
+        next()
+    } catch (err) {
+        console.log('Error hashing password: ', err)
+        next(err)
+    }
+}
+
 UserSchema.pre<IUserDocument>('save', async function (next) {
     const user: IUserDocument = this
     // user.isNew will also be handled by this condition (a new user's password is always "modified")
@@ -45,13 +55,16 @@ UserSchema.pre<IUserDocument>('save', async function (next) {
         return next()
     }
 
-    try {
-        user.password = await bcrypt.hash(user.password, kPasswordSalt)
-        next()
-    } catch (err) {
-        console.log('Error hashing password: ', err)
-        next(err)
+    hashPassword(user, next)
+})
+
+UserSchema.pre<mongoose.Query<IUserDocument>>('findOneAndUpdate', function (next) {
+    const update = this.getUpdate()
+    if (update.password) {
+        return hashPassword(update, next)
     }
+
+    next()
 })
 
 const UserModel = mongoose.model<IUserDocument>('user', UserSchema)
