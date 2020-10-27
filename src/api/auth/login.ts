@@ -1,6 +1,7 @@
 import { RequestHandler } from 'express'
 import passport from 'passport'
-import { performLoginRequestHandler, getUserAuthStatus, performMultifactorLogin, performSimpleLogin } from './utils'
+
+import { getUserAuthStatus, performMultifactorLogin, performSimpleLogin } from './utils'
 import { isCurrentDeviceTrusted, getUserDeviceInfo } from './multi-factor-auth/utils'
 
 const login: RequestHandler = (req, res, next) => {
@@ -38,6 +39,11 @@ const login: RequestHandler = (req, res, next) => {
                     device: getUserDeviceInfo(req)
                 })
             }
+        }
+
+        if (req.session) {
+            // One Week
+            req.session.cookie.maxAge = 604800000
         }
 
         console.log('Authentication process completed. Will respond with: ', authenticatedUser)
