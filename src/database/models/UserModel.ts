@@ -27,7 +27,7 @@ const UserSchema = new mongoose.Schema<IUserDocument>({
         type: mongoose.Schema.Types.String,
         required: true
     }
-})
+}, { timestamps: true })
 
 UserSchema.methods.doesPasswordMatch = function (password: string) {
     return bcrypt.compare(password, (this as IUserDocument).password)
@@ -38,31 +38,33 @@ UserSchema.methods.filterSensitiveData = function () {
     return { username, email }
 }
 
-async function hashPassword<D extends { password: string }>(doc: D, next: HookNextFunction) {
+function hashPassword(password: string): Promise<string> {
+    return bcrypt.hash(password, kPasswordSalt)
+}
+
+UserSchema.pre<IUserDocument>('save', async function (next) {
+    // user.isNew will also be handled by this condition (a new user's password is always "modified")
+    if (!this.isModified('password')) {
+        console.log('user.password not modified. will not hash')
+        return next()
+    }
+
     try {
-        doc.password = await bcrypt.hash(doc.password, kPasswordSalt)
+        console.log('Try hashing password for: ', this)
+        this.password = await hashPassword(this.password)
+        console.log('After hashing password: ', this)
         next()
     } catch (err) {
         console.log('Error hashing password: ', err)
         next(err)
     }
-}
-
-UserSchema.pre<IUserDocument>('save', async function (next) {
-    const user: IUserDocument = this
-    // user.isNew will also be handled by this condition (a new user's password is always "modified")
-    if (!user.isModified('password')) {
-        return next()
-    }
-
-    hashPassword(user, next)
 })
 
-UserSchema.pre<mongoose.Query<IUserDocument>>('findOneAndUpdate', function (next) {
+UserSchema.pre<mongoose.Query<IUserDocument>>('findOneAndUpdate', async function (next) {
     const update = this.getUpdate()
     if (update.password) {
-        return hashPassword(update, next)
-    }
+        update.password = await hashPassword(update.password)
+    } 
 
     next()
 })
