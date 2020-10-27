@@ -3,6 +3,8 @@ import { ErrorRequestHandler } from 'express'
 import { ErrorWithStatusCode, InvalidTokenError } from '../utils/errors'
 
 const errorHandler: ErrorRequestHandler = (err, _, res, __) => {
+    console.log('[ERROR HANDLER]: Error encountered: ', err)
+
     if (err instanceof ErrorWithStatusCode) {
         return res.status(err.statusCode).json({ message: err.message })
     } else if (err instanceof InvalidTokenError) {
