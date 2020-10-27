@@ -10,13 +10,12 @@ export default function (app: Application) {
         store: new MongoStore({
             mongooseConnection: mongoose.connection
         }),
-        // Removing <as string> gives error TS2322: Type 'string | undefined' is not assignable to type 'string | string[]'. 
-        // TODO: Resolve
         secret: config.sessionSecret,
         resave: false,
-        saveUninitialized: true,
+        saveUninitialized: false,
         cookie: {
-            httpOnly: false
-        }
+            httpOnly: false,
+            maxAge: 3600000 // One Hour
+        },
     }))
 }
