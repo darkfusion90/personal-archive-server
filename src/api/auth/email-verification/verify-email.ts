@@ -12,7 +12,7 @@ const verifyEmail: IVerifyEmailRequestHandler = async (req, res) => {
     const userId = sessionUserId(req) as string
 
     const token = await verifyEmailVerificationToken(req.params.token, userId)
-    await markEmailVerifiedForUser(userId)
+    await markEmailVerifiedForUser(userId, true)
     await token.deleteOne()
     res.json({ token })
 }
