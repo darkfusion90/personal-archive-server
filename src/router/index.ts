@@ -1,13 +1,13 @@
 import { Application } from 'express'
 import path from 'path'
 
-import userRouter from './user-router'
+import accountRouter from './account-router'
 import authRouter from './auth-router'
 import postsRouter from './posts-router'
 import config from '../config'
 
 export default function (app: Application) {
-    userRouter(app)
+    accountRouter(app)
     authRouter(app)
     postsRouter(app)
 
