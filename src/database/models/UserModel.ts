@@ -62,7 +62,7 @@ UserSchema.pre<IUserDocument>('save', async function (next) {
 
 UserSchema.pre<mongoose.Query<IUserDocument>>('findOneAndUpdate', async function (next) {
     const update = this.getUpdate()
-    if (update.password) {
+    if (update && update.password) {
         update.password = await hashPassword(update.password)
     } 
 
