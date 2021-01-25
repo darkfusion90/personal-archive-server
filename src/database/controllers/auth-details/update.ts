@@ -9,8 +9,8 @@ export const markMultifactorAuthForUser = (
 ).exec()
 
 
-export const markEmailVerifiedForUser = (userId: string) =>
+export const markEmailVerifiedForUser = (userId: string, emailVerified: boolean) =>
     AuthDetailModel.findOneAndUpdate(
         { user: userId },
-        { emailVerified: true }
-).exec()
+        { emailVerified }
+    ).exec()
