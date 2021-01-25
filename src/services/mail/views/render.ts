@@ -1,11 +1,12 @@
 import ejs from 'ejs'
 
-import { IUserDocument } from "../../../database/models/UserModel";
 import { emailConfirmation, deviceVerification } from "./views";
 
-export const renderEmailConfirmation = (user: IUserDocument): Promise<string> => {
-    return ejs.renderFile(emailConfirmation, { user })
-}
+export const renderEmailConfirmation = (
+    username: string,
+    confirmationLink: string
+): Promise<string> =>
+    ejs.renderFile(emailConfirmation, { username, confirmationLink })
 
 export interface IDeviceVerificationMailOpts {
     username: string,

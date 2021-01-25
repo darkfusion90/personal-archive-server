@@ -1,5 +1,17 @@
+<p>
+    Hello <%= username %>,
+</p>
+
 <div>
-    <h2>User Details: </h2>
-    <p>Username: <%= user.username %></p>
-    <p>Email: <%= user.email %></p>
+    <p>
+        You requested an email verification.
+    </p>
+    
+    <a href="<%= confirmationLink %>">Click here to verify your email</a>
 </div>
+
+<p>
+    If you are having trouble opening the link above,
+    copy the following link to your browser's search bar
+</p>
+<p><%= confirmationLink %></p>

@@ -3,8 +3,8 @@ import { renderEmailConfirmation } from './views'
 
 import { IUserDocument } from '../../database/models/UserModel'
 
-export const sendEmailConfirmationMail = async (user: IUserDocument) => {
-    const emailConfirmationHtml = await renderEmailConfirmation(user)
+export const sendEmailConfirmationMail = async (user: IUserDocument, confirmationLink: string) => {
+    const emailConfirmationHtml = await renderEmailConfirmation(user.username, confirmationLink)
 
     return sendMail({
         to: user.email,
