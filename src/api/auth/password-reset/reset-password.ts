@@ -3,7 +3,7 @@ import { RequestHandler } from 'express'
 import asyncHandler from '../../async-handler'
 import { verifyPasswordResetToken } from '../../../database/controllers/password-reset-tokens'
 import { updateUserPassword } from '../../../database/controllers/users'
-import { verifyTokenValidator } from './validators'
+import { passwordResetValidator } from './validators'
 
 type IGeneratePasswordResetTokenHandler = RequestHandler<
     { token: string },
@@ -25,6 +25,6 @@ const verifyPasswordResetTokenHandler: IGeneratePasswordResetTokenHandler = asyn
 }
 
 export default [
-    verifyTokenValidator,
+    passwordResetValidator,
     asyncHandler(verifyPasswordResetTokenHandler)
 ]

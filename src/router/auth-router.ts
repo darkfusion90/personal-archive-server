@@ -19,7 +19,8 @@ export default function (app: Application) {
     app.post('/api/auth/email-verification/generate', emailVerification.generate)
     app.post('/api/auth/email-verification/verify/:token', emailVerification.verify)
 
-    const { passwordReset } = auth
-    app.post('/api/auth/password-reset/generate', passwordReset.generate as any)
-    app.post('/api/auth/password-reset/verify/:token', passwordReset.verify as any)
+    const { passwordReset: passwordResetHandler } = auth
+    app.post('/api/auth/password-reset/generate', passwordResetHandler.generate as any)
+    app.get('/api/auth/password-reset/check/:token', passwordResetHandler.check as any)
+    app.post('/api/auth/password-reset/reset/:token', passwordResetHandler.resetPassword as any)
 }

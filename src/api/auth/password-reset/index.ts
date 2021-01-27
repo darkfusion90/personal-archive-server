@@ -1,4 +1,5 @@
 import generate from './generate-token'
-import verify from './verify-token'
+import resetPassword from './reset-password'
+import check from './check-token-validity'
 
-export default { generate, verify }
+export default { generate, resetPassword, check }

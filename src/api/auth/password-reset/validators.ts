@@ -5,7 +5,7 @@ export const generateTokenValidator = createValidation([
     body('username', 'Username is required').notEmpty()
 ])
 
-export const verifyTokenValidator =  createValidation([
+export const passwordResetValidator =  createValidation([
     body('password', 'Password is required').notEmpty()
 ])
 
