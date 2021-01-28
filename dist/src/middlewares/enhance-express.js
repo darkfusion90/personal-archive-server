@@ -16,6 +16,9 @@ const enhanceExpress = (_, res, next) => {
             res.json(data);
         }
     };
+    res.message = function (message, status) {
+        res.status(status || 200).json({ message });
+    };
     next();
 };
 exports.default = enhanceExpress;

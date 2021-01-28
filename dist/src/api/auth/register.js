@@ -6,7 +6,7 @@ const register = (req, res, next) => {
     const { username, email, password } = req.body;
     users_1.createUser({ username, email, password })
         .then((user) => {
-        utils_1.performLogin(user)(req, res, next);
+        utils_1.performLoginRequestHandler(user)(req, res, next);
     })
         .catch(next);
 };

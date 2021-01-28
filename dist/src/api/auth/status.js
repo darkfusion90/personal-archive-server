@@ -9,11 +9,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const utils_1 = require("../../utils");
+const utils_1 = require("./utils");
 const status = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.json({
-        user: utils_1.sessionUser(req),
-        loggedIn: req.isAuthenticated()
-    });
+    const authStatus = yield utils_1.getUserAuthStatus(req);
+    if (authStatus.loggedIn) {
+        res.json(authStatus);
+    }
+    else {
+        res.json({ loggedIn: false });
+    }
 });
 exports.default = status;

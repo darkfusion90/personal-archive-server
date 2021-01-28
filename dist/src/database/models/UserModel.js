@@ -32,7 +32,7 @@ const UserSchema = new mongoose_1.default.Schema({
         type: mongoose_1.default.Schema.Types.String,
         required: true
     }
-});
+}, { timestamps: true });
 exports.UserSchema = UserSchema;
 UserSchema.methods.doesPasswordMatch = function (password) {
     return bcrypt_1.default.compare(password, this.password);
@@ -41,21 +41,35 @@ UserSchema.methods.filterSensitiveData = function () {
     const { username, email } = this;
     return { username, email };
 };
+function hashPassword(password) {
+    return bcrypt_1.default.hash(password, kPasswordSalt);
+}
 UserSchema.pre('save', function (next) {
     return __awaiter(this, void 0, void 0, function* () {
-        const user = this;
         // user.isNew will also be handled by this condition (a new user's password is always "modified")
-        if (!user.isModified('password')) {
+        if (!this.isModified('password')) {
+            console.log('user.password not modified. will not hash');
             return next();
         }
         try {
-            user.password = yield bcrypt_1.default.hash(user.password, kPasswordSalt);
+            console.log('Try hashing password for: ', this);
+            this.password = yield hashPassword(this.password);
+            console.log('After hashing password: ', this);
             next();
         }
         catch (err) {
             console.log('Error hashing password: ', err);
             next(err);
         }
+    });
+});
+UserSchema.pre('findOneAndUpdate', function (next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const update = this.getUpdate();
+        if (update && update.password) {
+            update.password = yield hashPassword(update.password);
+        }
+        next();
     });
 });
 const UserModel = mongoose_1.default.model('user', UserSchema);
