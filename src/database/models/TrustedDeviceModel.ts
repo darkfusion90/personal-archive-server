@@ -1,44 +1,34 @@
-import mongoose from 'mongoose'
+import mongoose from "mongoose";
 
-const DataTypes = mongoose.Schema.Types
+const DataTypes = mongoose.Schema.Types;
 
 export interface IDevice {
-    userAgent: string
-    ipAddress: string
+  userAgent: string;
+  ipAddress: string;
 }
 
-export const DeviceSchema = new mongoose.Schema<IDevice>({
-    userAgent: {
-        type: DataTypes.String,
-        required: true,
-        index: 'text',
-    },
-    ipAddress: {
-        type: DataTypes.String,
-        required: true,
-        index: 'text',
-    }
-})
-
 export interface ITrustedDeviceDocument extends mongoose.Document {
-    user: string
-    devices: IDevice[]
+  user: string;
+  devices: string[];
 }
 
 const TrustedDeviceSchema = new mongoose.Schema<ITrustedDeviceDocument>({
-    user: {
-        type: DataTypes.ObjectId,
-        ref: 'User',
-        unique: true,
-        index: true,
-        required: true
-    },
-    devices: {
-        type: [DeviceSchema],
-        required: true,
-        index: true,
-        default: []
-    }
-})
+  user: {
+    type: DataTypes.ObjectId,
+    ref: "User",
+    unique: true,
+    index: true,
+    required: true,
+  },
+  devices: {
+    type: [DataTypes.String],
+    required: true,
+    index: true,
+    default: [],
+  },
+});
 
-export const TrustedDeviceModel = mongoose.model<ITrustedDeviceDocument>('TrustedDevice', TrustedDeviceSchema)
+export const TrustedDeviceModel = mongoose.model<ITrustedDeviceDocument>(
+  "TrustedDevice",
+  TrustedDeviceSchema
+);

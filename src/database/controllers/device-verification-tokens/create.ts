@@ -1,7 +1,12 @@
-import DeviceVerificationTokenModel from '../../models/DeviceVerificationTokenModel'
-import { IDevice } from '../../models/TrustedDeviceModel'
+import DeviceVerificationTokenModel from "../../models/DeviceVerificationTokenModel";
+import { IDevice } from "../../models/TrustedDeviceModel";
+import { encryptDevice } from "../trusted-devices/utils";
 
-export const createAuthToken = (userId: string, deviceToVerify: IDevice) => {
-    const deviceVerificationToken = new DeviceVerificationTokenModel({ user: userId, deviceToVerify })
-    return deviceVerificationToken.save()
-}
+export const createAuthToken = async (userId: string, device: IDevice) => {
+  const deviceToVerify = await encryptDevice(device);
+  const deviceVerificationToken = new DeviceVerificationTokenModel({
+    user: userId,
+    deviceToVerify,
+  });
+  return deviceVerificationToken.save();
+};

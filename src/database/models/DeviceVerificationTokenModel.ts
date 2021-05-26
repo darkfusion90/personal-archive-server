@@ -1,23 +1,30 @@
-import mongoose from 'mongoose'
+import mongoose from "mongoose";
 
-import { DeviceSchema, IDevice } from './TrustedDeviceModel'
-import TokenModel, { ITokenDocument, discriminatorKey } from './TokenModel'
+import { IDevice } from "./TrustedDeviceModel";
+import TokenModel, { ITokenDocument, discriminatorKey } from "./TokenModel";
 
 export interface IDeviceVerificationTokenDocument extends ITokenDocument {
-    deviceToVerify: IDevice
+  deviceToVerify: IDevice;
 }
 
-export const DeviceVerificationTokenSchema = new mongoose.Schema<IDeviceVerificationTokenDocument>({
+export const DeviceVerificationTokenSchema = new mongoose.Schema<
+  IDeviceVerificationTokenDocument
+>(
+  {
     deviceToVerify: {
-        type: DeviceSchema,
-        required: true
-    }
-}, { discriminatorKey })
+      type: mongoose.Schema.Types.String,
+      required: true,
+    },
+  },
+  { discriminatorKey }
+);
 
-export const DeviceVerificationTokenModel = TokenModel.discriminator<IDeviceVerificationTokenDocument>(
-    'DeviceVerificationToken',
-    DeviceVerificationTokenSchema,
-    'device-verification'
-)
+export const DeviceVerificationTokenModel = TokenModel.discriminator<
+  IDeviceVerificationTokenDocument
+>(
+  "DeviceVerificationToken",
+  DeviceVerificationTokenSchema,
+  "device-verification"
+);
 
-export default DeviceVerificationTokenModel
+export default DeviceVerificationTokenModel;
