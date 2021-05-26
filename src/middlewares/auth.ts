@@ -1,15 +1,18 @@
-import passportLocal from 'passport-local'
-import { getUserByUsername } from '../database/controllers/users'
+import passportLocal from "passport-local";
+import { getUserByUsername } from "../database/controllers/users";
 
-const strategy = new passportLocal.Strategy(async (username, password, done) => {
-    const user = await getUserByUsername(username, true).catch(done)
-    const correctLogin = user ? await user.doesPasswordMatch(password) : false
+const strategy = new passportLocal.Strategy(
+  async (username, password, done) => {
+    const user = await getUserByUsername(username, true).catch(done);
+    console.log({ userrrr: user });
+    const correctLogin = user ? await user.doesPasswordMatch(password) : false;
 
     if (!correctLogin) {
-        return done(null, false, { message: 'Incorrect username or password' })
+      return done(null, false, { message: "Incorrect username or password" });
     }
 
-    done(null, user)
-})
+    done(null, user);
+  }
+);
 
-export default strategy
+export default strategy;
