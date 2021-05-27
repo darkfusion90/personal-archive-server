@@ -21,17 +21,17 @@ const UserSchema = new mongoose_1.default.Schema({
         type: mongoose_1.default.Schema.Types.String,
         required: true,
         unique: true,
-        trim: true
+        trim: true,
     },
     email: {
         type: mongoose_1.default.Schema.Types.String,
         required: true,
-        trim: true
+        trim: true,
     },
     password: {
         type: mongoose_1.default.Schema.Types.String,
-        required: true
-    }
+        required: true,
+    },
 }, { timestamps: true });
 exports.UserSchema = UserSchema;
 UserSchema.methods.doesPasswordMatch = function (password) {
@@ -44,26 +44,26 @@ UserSchema.methods.filterSensitiveData = function () {
 function hashPassword(password) {
     return bcrypt_1.default.hash(password, kPasswordSalt);
 }
-UserSchema.pre('save', function (next) {
+UserSchema.pre("save", function (next) {
     return __awaiter(this, void 0, void 0, function* () {
         // user.isNew will also be handled by this condition (a new user's password is always "modified")
-        if (!this.isModified('password')) {
-            console.log('user.password not modified. will not hash');
+        if (!this.isModified("password")) {
+            console.log("user.password not modified. will not hash");
             return next();
         }
         try {
-            console.log('Try hashing password for: ', this);
+            console.log("Try hashing password for: ", this);
             this.password = yield hashPassword(this.password);
-            console.log('After hashing password: ', this);
+            console.log("After hashing password: ", this);
             next();
         }
         catch (err) {
-            console.log('Error hashing password: ', err);
+            console.log("Error hashing password: ", err);
             next(err);
         }
     });
 });
-UserSchema.pre('findOneAndUpdate', function (next) {
+UserSchema.pre("findOneAndUpdate", function (next) {
     return __awaiter(this, void 0, void 0, function* () {
         const update = this.getUpdate();
         if (update && update.password) {
@@ -72,5 +72,5 @@ UserSchema.pre('findOneAndUpdate', function (next) {
         next();
     });
 });
-const UserModel = mongoose_1.default.model('user', UserSchema);
+const UserModel = mongoose_1.default.model("user", UserSchema);
 exports.default = UserModel;

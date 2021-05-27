@@ -3,34 +3,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TrustedDeviceModel = exports.DeviceSchema = void 0;
+exports.TrustedDeviceModel = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const DataTypes = mongoose_1.default.Schema.Types;
-exports.DeviceSchema = new mongoose_1.default.Schema({
-    userAgent: {
-        type: DataTypes.String,
-        required: true,
-        index: 'text',
-    },
-    ipAddress: {
-        type: DataTypes.String,
-        required: true,
-        index: 'text',
-    }
-});
 const TrustedDeviceSchema = new mongoose_1.default.Schema({
     user: {
         type: DataTypes.ObjectId,
-        ref: 'User',
+        ref: "User",
         unique: true,
         index: true,
-        required: true
+        required: true,
     },
     devices: {
-        type: [exports.DeviceSchema],
+        type: [DataTypes.String],
         required: true,
         index: true,
-        default: []
-    }
+        default: [],
+    },
 });
-exports.TrustedDeviceModel = mongoose_1.default.model('TrustedDevice', TrustedDeviceSchema);
+exports.TrustedDeviceModel = mongoose_1.default.model("TrustedDevice", TrustedDeviceSchema);

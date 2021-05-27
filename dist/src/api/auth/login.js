@@ -16,14 +16,14 @@ const passport_1 = __importDefault(require("passport"));
 const utils_1 = require("./utils");
 const utils_2 = require("./multi-factor-auth/utils");
 const login = (req, res, next) => {
-    passport_1.default.authenticate('local', (err, user, info) => __awaiter(void 0, void 0, void 0, function* () {
-        console.log('Login Handler');
+    passport_1.default.authenticate("local", (err, user, info) => __awaiter(void 0, void 0, void 0, function* () {
+        console.log("Login Handler");
         if (err) {
-            console.log('Error in login handler: ', err);
+            console.log("Error in login handler: ", err);
             throw err;
         }
         if (!user) {
-            console.log('User not found for login credentials. Login Failed');
+            console.log("User not found for login credentials. Login Failed");
             return res.status(401).json(info);
         }
         // Performing simple passport login here
@@ -39,14 +39,14 @@ const login = (req, res, next) => {
         const { multifactorAuthEnabled } = yield utils_1.getUserAuthStatus(req);
         if (multifactorAuthEnabled) {
             if (yield utils_2.isCurrentDeviceTrusted(req)) {
-                console.log('MultifactorAuth: Current device trusted. will login');
+                console.log("MultifactorAuth: Current device trusted. will login");
                 yield utils_1.performMultifactorLogin(req);
             }
             else {
-                console.log('MultifactorAuth: Current device not trusted. Will respond login failed');
+                console.log("MultifactorAuth: Current device not trusted. Will respond login failed");
                 return res.status(401).json({
-                    message: 'device-not-trusted',
-                    device: utils_2.getUserDeviceInfo(req)
+                    message: "device-not-trusted",
+                    device: utils_2.getUserDeviceInfo(req),
                 });
             }
         }
@@ -54,7 +54,7 @@ const login = (req, res, next) => {
             // One Week
             req.session.cookie.maxAge = 604800000;
         }
-        console.log('Authentication process completed. Will respond with: ', authenticatedUser);
+        console.log("Authentication process completed. Will respond with: ", authenticatedUser);
         res.json(authenticatedUser);
     }))(req, res, next);
 };

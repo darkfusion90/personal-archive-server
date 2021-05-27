@@ -9,17 +9,27 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getFromTrustedDevice = exports.isDeviceTrusted = void 0;
+exports.getFromTrustedDevice = exports.isDeviceTrusted = exports.resolveDeviceString = void 0;
 const TrustedDeviceModel_1 = require("../../models/TrustedDeviceModel");
+const utils_1 = require("./utils");
+exports.resolveDeviceString = (device) => {
+    if (typeof device !== "string") {
+        return utils_1.hashDevice(device);
+    }
+    else {
+        return device;
+    }
+};
 exports.isDeviceTrusted = (userId, device) => __awaiter(void 0, void 0, void 0, function* () {
-    const trustedDevices = yield exports.getFromTrustedDevice(userId, device);
-    return trustedDevices !== null;
+    const trustedDeviceOfUser = yield exports.getFromTrustedDevice(userId, device);
+    console.log({ trustedDeviceOfUser });
+    return trustedDeviceOfUser !== null;
 });
-exports.getFromTrustedDevice = (userId, { userAgent, ipAddress }) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getFromTrustedDevice = (userId, device) => __awaiter(void 0, void 0, void 0, function* () {
+    const deviceStr = exports.resolveDeviceString(device);
+    console.log({ deviceStr });
     return yield TrustedDeviceModel_1.TrustedDeviceModel.findOne({
         user: userId,
-        devices: {
-            $elemMatch: { userAgent, ipAddress }
-        }
+        devices: deviceStr,
     }).exec();
 });

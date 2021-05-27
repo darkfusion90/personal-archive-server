@@ -16,9 +16,10 @@ const passport_local_1 = __importDefault(require("passport-local"));
 const users_1 = require("../database/controllers/users");
 const strategy = new passport_local_1.default.Strategy((username, password, done) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield users_1.getUserByUsername(username, true).catch(done);
+    console.log({ userrrr: user });
     const correctLogin = user ? yield user.doesPasswordMatch(password) : false;
     if (!correctLogin) {
-        return done(null, false, { message: 'Incorrect username or password' });
+        return done(null, false, { message: "Incorrect username or password" });
     }
     done(null, user);
 }));

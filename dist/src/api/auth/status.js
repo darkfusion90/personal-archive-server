@@ -12,11 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const utils_1 = require("./utils");
 const status = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const authStatus = yield utils_1.getUserAuthStatus(req);
-    if (authStatus.loggedIn) {
-        res.json(authStatus);
-    }
-    else {
-        res.json({ loggedIn: false });
-    }
+    res.json(authStatus);
 });
 exports.default = status;

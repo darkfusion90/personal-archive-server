@@ -24,13 +24,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DeviceVerificationTokenModel = exports.DeviceVerificationTokenSchema = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
-const TrustedDeviceModel_1 = require("./TrustedDeviceModel");
 const TokenModel_1 = __importStar(require("./TokenModel"));
 exports.DeviceVerificationTokenSchema = new mongoose_1.default.Schema({
     deviceToVerify: {
-        type: TrustedDeviceModel_1.DeviceSchema,
-        required: true
-    }
+        type: mongoose_1.default.Schema.Types.String,
+        required: true,
+    },
 }, { discriminatorKey: TokenModel_1.discriminatorKey });
-exports.DeviceVerificationTokenModel = TokenModel_1.default.discriminator('DeviceVerificationToken', exports.DeviceVerificationTokenSchema, 'device-verification');
+exports.DeviceVerificationTokenModel = TokenModel_1.default.discriminator("DeviceVerificationToken", exports.DeviceVerificationTokenSchema, "device-verification");
 exports.default = exports.DeviceVerificationTokenModel;
