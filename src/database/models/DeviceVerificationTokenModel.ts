@@ -4,7 +4,7 @@ import { IDevice } from "./TrustedDeviceModel";
 import TokenModel, { ITokenDocument, discriminatorKey } from "./TokenModel";
 
 export interface IDeviceVerificationTokenDocument extends ITokenDocument {
-  deviceToVerify: IDevice;
+  deviceToVerify: string;
 }
 
 export const DeviceVerificationTokenSchema = new mongoose.Schema<

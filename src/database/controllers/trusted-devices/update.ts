@@ -4,10 +4,16 @@ import {
   IDevice,
   ITrustedDeviceDocument,
 } from "../../models/TrustedDeviceModel";
-import { isDeviceTrusted } from "./retrieve";
-import { encryptDevice } from "./utils";
+import {
+  isDeviceTrusted,
+  IDeviceOrHash,
+  resolveDeviceString,
+} from "./retrieve";
 
-export const addUserTrustedDevice = async (userId: string, device: IDevice) => {
+export const addUserTrustedDevice = async (
+  userId: string,
+  device: IDeviceOrHash
+) => {
   const query = { user: userId };
 
   // To prevent pushing same device again. Mongoose doesn't allow compound indexing
@@ -20,7 +26,7 @@ export const addUserTrustedDevice = async (userId: string, device: IDevice) => {
     return true;
   }
 
-  const deviceStr = await encryptDevice(device);
+  const deviceStr = resolveDeviceString(device)
 
   const update: mongoose.UpdateQuery<ITrustedDeviceDocument> = {
     $push: {
